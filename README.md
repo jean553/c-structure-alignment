@@ -12,7 +12,8 @@ clang -Weverything main.c -o output
 
 Considering that memory is access by chrunks of 4 bytes,
 then the following structure members are not aligned
-(`two` is not aligned):
+(`two` is not aligned), so the compiler automatically
+aligns it by adding a padding.
 
 ```c
 struct NotAligned {
@@ -67,3 +68,18 @@ struct Optimized {
     int two; // 4 bytes
 };
 ```
+
+## Disable automatic padding
+
+Using `__attribute__((packed))` removes automatic padding and alignment.
+
+```c
+struct NotAligned {
+    char one;
+    int two;
+} __attribute__((packed));
+```
+
+As the attribute `two` is now on two chrunks (two different double-words in memory),
+it needs at least two operations to access its data (double-word calculation + offset).
+In case of padding, it would have only requires one operation (double-word calculation).
