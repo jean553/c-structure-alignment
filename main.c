@@ -3,7 +3,7 @@
 struct NotAligned {
     char one;
     int two;
-};
+} __attribute__((packed));
 
 struct Aligned {
     char one;
